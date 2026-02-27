@@ -1,13 +1,23 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.0.0 → 1.1.0 (amendment: branch naming)
+Version change: 1.1.0 → 1.2.0 (MINOR: expanded Principle I and II)
 
 Modified principles:
-  - Development Workflow §1: expanded to allow SpecKit `###-short-name`
-    pattern alongside the existing `feature/<short-description>` format.
-    Resolves analysis finding C1 (CRITICAL — constitution MUST violation
-    caused by SpecKit-generated branch `001-overdue-todos`).
+  - Principle I (Clean Code & Consistent Style): added file hygiene
+    bullet (LF endings, trailing whitespace) and documentation bullet
+    (JSDoc on public symbols, comments explain why not what).
+    Source: docs/coding-guidelines.md §General Formatting Rules and
+    §Comments and Documentation.
+  - Principle II (Test-First Development): added test quality bullet
+    (behavior-not-implementation, non-brittle) and test utilities bullet
+    (shared mock data in __mocks__/fixtures/, helper extraction).
+    Source: docs/testing-guidelines.md §Test Quality Over Quantity,
+    §Test Fixtures and Mock Data, §Test Utilities.
+
+Previous amendments retained:
+  - Development Workflow §1: SpecKit `###-short-name` + ad-hoc
+    `feature/<short-description>` both accepted (C1 fix, v1.1.0).
 
 Added sections:
   - None
@@ -19,9 +29,10 @@ Templates reviewed and status:
   - .specify/templates/plan-template.md    ✅ no change needed
   - .specify/templates/spec-template.md    ✅ no change needed
   - .specify/templates/tasks-template.md   ✅ no change needed
+  - .specify/templates/constitution-template.md  ✅ no change needed
 
 Follow-up TODOs:
-  - None; C1 fully resolved.
+  - None; all doc-sourced gaps resolved.
 -->
 
 # Copilot Bootcamp Todo App Constitution
@@ -39,6 +50,8 @@ All code MUST follow the formatting and naming conventions defined in
 - **Imports**: Ordered external → internal → styles, separated by blank
   lines. No circular imports.
 - **Line length**: MUST stay under 100 characters for code.
+- **File hygiene**: Line endings MUST be LF (Unix-style). Trailing
+  whitespace MUST be removed from every file.
 - **DRY**: Repeated logic MUST be extracted into shared utilities or
   components before merging.
 - **KISS**: Prefer the simplest correct implementation. Premature
@@ -49,6 +62,10 @@ All code MUST follow the formatting and naming conventions defined in
   a meaningful user-facing error message.
 - **Linting**: All linting errors MUST be resolved before opening a PR.
   No `console.log` statements may remain in production code.
+- **Documentation**: All public functions and React components MUST
+  have JSDoc annotations documenting parameters and return values.
+  Comments MUST explain *why*, not *what* — obvious code MUST NOT be
+  annotated.
 
 *Rationale*: Consistent style reduces cognitive load, speeds up review,
 and prevents common runtime errors across a team-developed codebase.
@@ -72,6 +89,13 @@ Tests MUST be written before or alongside implementation — never after.
 - **Structure**: Follow Arrange-Act-Assert (AAA) within each test.
 - **Coverage gate**: A PR that drops overall coverage below 80% MUST
   NOT be merged.
+- **Test quality**: Tests MUST assert observable behavior, not
+  implementation details. A pure refactoring that does not change
+  observable behavior MUST NOT break any test. Brittle tests are a
+  constitution violation.
+- **Test utilities**: Shared mock data MUST reside in `__mocks__/` or
+  `fixtures/` directories. Common setup logic MUST be extracted into
+  helper functions to prevent test duplication.
 
 *Rationale*: TDD produces more reliable software and serves as living
 documentation of expected behavior.
@@ -208,4 +232,4 @@ as a formal amendment.
 any feature. Violations MUST be resolved or formally exempted in the
 plan's Complexity Tracking section.
 
-**Version**: 1.1.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-02-27
+**Version**: 1.2.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-02-27
