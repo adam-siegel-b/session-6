@@ -41,7 +41,7 @@ class and surface a visible badge.
 | IV. Scope Discipline | No filtering, notifications, grouping, or server state added; YAGNI respected | ✅ PASS |
 | V. Monorepo Architecture | Frontend-only; `packages/backend/` untouched; frontend independently testable | ✅ PASS |
 
-**All gates PASS. Proceeding to Phase 0.**
+**All gates PASS.**
 
 *Post-design re-check: No design decision introduced violations — see research.md
 and data-model.md for rationale. Gates remain PASS.*
@@ -52,11 +52,13 @@ and data-model.md for rationale. Gates remain PASS.*
 
 ```text
 specs/001-overdue-todos/
-├── plan.md          # This file
-├── research.md      # Phase 0 output
-├── data-model.md    # Phase 1 output
-├── quickstart.md    # Phase 1 output
-└── tasks.md         # Phase 2 output (/speckit.tasks — not yet created)
+├── plan.md          # This file ✅
+├── research.md      # Phase 0 output ✅
+├── data-model.md    # Phase 1 output ✅
+├── quickstart.md    # Phase 1 output ✅
+├── tasks.md         # Phase 2 output ✅
+└── checklists/
+    └── requirements.md  # Spec quality checklist ✅
 ```
 
 *No `contracts/` directory: this is a purely internal frontend UI feature with
@@ -83,8 +85,8 @@ packages/frontend/
 packages/backend/                          # UNMODIFIED (no backend changes)
 ```
 
-**Structure Decision**: Frontend-only, Option 2 (web app with
-`packages/frontend/` + `packages/backend/`). Only `packages/frontend/` is
-modified. New utility lives in `packages/frontend/src/utils/` per the canonical
-structure in `docs/coding-guidelines.md`. No shared package needed because
-overdue logic is UI-layer only.
+**Structure Decision**: Frontend-only web app (`packages/frontend/` +
+`packages/backend/`). Only `packages/frontend/` is modified. New utility
+lives in `packages/frontend/src/utils/` per the canonical structure in
+`docs/coding-guidelines.md`. No shared package needed because overdue logic
+is UI-layer only.
