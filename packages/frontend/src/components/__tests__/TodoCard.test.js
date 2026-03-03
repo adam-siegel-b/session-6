@@ -100,3 +100,127 @@ describe('TodoCard Component', () => {
     expect(screen.queryByText(/Due:/)).not.toBeInTheDocument();
   });
 });
+
+describe('TodoCard — overdue behaviour', () => {
+  // Fix "today" to 2026-03-15 so all date comparisons are deterministic
+  const TODAY = new Date('2026-03-15T00:00:00');
+  const PAST_DATE = '2026-03-01';   // before today → overdue
+  const TODAY_DATE = '2026-03-15';  // same day → NOT overdue
+  const FUTURE_DATE = '2026-04-01'; // after today → NOT overdue
+
+  const mockHandlers = {
+    onToggle: jest.fn(),
+    onEdit: jest.fn().mockResolvedValue(undefined),
+    onDelete: jest.fn(),
+  };
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+    jest.setSystemTime(TODAY);
+    jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  // FR-001: incomplete todo with a past due date → overdue class applied
+  it('FR-001: applies overdue class for incomplete todo with past due date', () => {
+    const todo = { id: 1, title: 'Overdue Task', dueDate: PAST_DATE, completed: 0 };
+    const { container } = render(
+      <TodoCard todo={todo} {...mockHandlers} isLoading={false} />
+    );
+
+    expect(container.querySelector('.todo-card')).toHaveClass('overdue');
+  });
+
+  // FR-001: overdue badge is visible for screen readers / sighted users
+  it('FR-001: shows overdue badge for incomplete past-due todo', () => {
+    const todo = { id: 1, title: 'Overdue Task', dueDate: PAST_DATE, completed: 0 };
+    render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+
+    expect(screen.getByText('Overdue')).toBeInTheDocument();
+  });
+
+  // FR-001: due-date element gets overdue-date class
+  it('FR-001: applies overdue-date class to the due-date element', () => {
+    const todo = { id: 1, title: 'Overdue Task', dueDate: PAST_DATE, completed: 0 };
+    const { container } = render(
+      <TodoCard todo={todo} {...mockHandlers} isLoading={false} />
+    );
+
+    expect(container.querySelector('.todo-due-date')).toHaveClass('overdue-date');
+  });
+
+  // FR-003: todo due exactly today is NOT overdue
+  it('FR-003: does not apply overdue class when due date is today', () => {
+    const todo = { id: 2, title: 'Due Today', dueDate: TODAY_DATE, completed: 0 };
+    const { container } = render(
+      <TodoCard todo={todo} {...mockHandlers} isLoading={false} />
+    );
+
+    expect(container.querySelector('.todo-card')).not.toHaveClass('overdue');
+    expect(screen.queryByText('Overdue')).not.toBeInTheDocument();
+  });
+
+  // FR-004: completed todo with a past due date is NOT overdue
+  it('FR-004: does not apply overdue class when todo is completed', () => {
+    const todo = { id: 3, title: 'Completed Old Task', dueDate: PAST_DATE, completed: 1 };
+    const { container } = render(
+      <TodoCard todo={todo} {...mockHandlers} isLoading={false} />
+    );
+
+    expect(container.querySelector('.todo-card')).not.toHaveClass('overdue');
+    expect(screen.queryByText('Overdue')).not.toBeInTheDocument();
+  });
+
+  // FR-005: todo with no due date is NOT overdue
+  it('FR-005: does not apply overdue class when dueDate is null', () => {
+    const todo = { id: 4, title: 'No Date Task', dueDate: null, completed: 0 };
+    const { container } = render(
+      <TodoCard todo={todo} {...mockHandlers} isLoading={false} />
+    );
+
+    expect(container.querySelector('.todo-card')).not.toHaveClass('overdue');
+    expect(screen.queryByText('Overdue')).not.toBeInTheDocument();
+  });
+
+  // FR-007: todo with a future due date is NOT overdue (simulates editing to future)
+  it('FR-007: does not apply overdue class when due date is in the future', () => {
+    const todo = { id: 5, title: 'Future Task', dueDate: FUTURE_DATE, completed: 0 };
+    const { container } = render(
+      <TodoCard todo={todo} {...mockHandlers} isLoading={false} />
+    );
+
+    expect(container.querySelector('.todo-card')).not.toHaveClass('overdue');
+    expect(screen.queryByText('Overdue')).not.toBeInTheDocument();
+  });
+
+  // FR-008: overdue todo still has functional edit button
+  it('FR-008: overdue todo edit button is functional', () => {
+    const todo = { id: 6, title: 'Overdue Task', dueDate: PAST_DATE, completed: 0 };
+    render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+
+    fireEvent.click(screen.getByLabelText(/Edit/));
+    expect(screen.getByDisplayValue('Overdue Task')).toBeInTheDocument();
+  });
+
+  // FR-008: overdue todo still has functional complete checkbox
+  it('FR-008: overdue todo checkbox is functional', () => {
+    const todo = { id: 7, title: 'Overdue Task', dueDate: PAST_DATE, completed: 0 };
+    render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+
+    fireEvent.click(screen.getByRole('checkbox'));
+    expect(mockHandlers.onToggle).toHaveBeenCalledWith(7);
+  });
+
+  // FR-008: overdue todo still has functional delete button
+  it('FR-008: overdue todo delete button is functional', () => {
+    window.confirm = jest.fn(() => true);
+    const todo = { id: 8, title: 'Overdue Task', dueDate: PAST_DATE, completed: 0 };
+    render(<TodoCard todo={todo} {...mockHandlers} isLoading={false} />);
+
+    fireEvent.click(screen.getByLabelText(/Delete/));
+    expect(mockHandlers.onDelete).toHaveBeenCalledWith(8);
+  });
+});

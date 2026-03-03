@@ -18,7 +18,7 @@
 
 **Purpose**: Create the `utils/` directory structure required by the implementation plan.
 
-- [ ] T001 Create `packages/frontend/src/utils/` and `packages/frontend/src/utils/__tests__/` directories
+- [X] T001 Create `packages/frontend/src/utils/` and `packages/frontend/src/utils/__tests__/` directories
 
 **Checkpoint**: Directories exist — foundational work can begin.
 
@@ -32,14 +32,14 @@ stories. It must exist and be tested before any component or style work begins.
 **⚠️ CRITICAL**: Follow Red-Green-Refactor. Write tests (T002) first — they MUST FAIL —
 then implement (T003) to make them pass.
 
-- [ ] T002 Write unit tests covering all 6 truth-table rows in `packages/frontend/src/utils/__tests__/isOverdue.test.js`
+- [X] T002 Write unit tests covering all 6 truth-table rows in `packages/frontend/src/utils/__tests__/isOverdue.test.js`
   - null dueDate → false
   - past dueDate + incomplete → true
   - today's date + incomplete → false (boundary)
   - future dueDate + incomplete → false
   - past dueDate + complete → false
   - all cases with `completed = 1` → false
-- [ ] T003 Implement `isOverdue(dueDate, completed)` in `packages/frontend/src/utils/isOverdue.js` (ISO string comparison per data-model.md; make T002 tests pass)
+- [X] T003 Implement `isOverdue(dueDate, completed)` in `packages/frontend/src/utils/isOverdue.js` (ISO string comparison per data-model.md; make T002 tests pass)
 
 **Checkpoint**: `isOverdue` utility is tested and passing — all user story phases can now proceed.
 
@@ -54,9 +54,9 @@ then implement (T003) to make them pass.
 complete, future due, no due date). Only past-due incomplete todos show the badge.
 Verify in both light and dark mode.
 
-- [ ] T004 [P] [US1] Add `.todo-card.overdue` CSS modifier class (3px left border in `--danger-color`, `.overdue-badge` styles) to `packages/frontend/src/App.css`
-- [ ] T005 [US1] Update `packages/frontend/src/components/TodoCard.js` to import `isOverdue`, apply `overdue` CSS class to root `div`, and render `<span className="overdue-badge">Overdue</span>` next to the due date when overdue
-- [ ] T006 [US1] Add overdue visual indicator test cases to `packages/frontend/src/components/__tests__/TodoCard.test.js`
+- [X] T004 [P] [US1] Add `.todo-card.overdue` CSS modifier class (3px left border in `--danger-color`, `.overdue-badge` styles) to `packages/frontend/src/App.css`
+- [X] T005 [US1] Update `packages/frontend/src/components/TodoCard.js` to import `isOverdue`, apply `overdue` CSS class to root `div`, and render `<span className="overdue-badge">Overdue</span>` next to the due date when overdue
+- [X] T006 [US1] Add overdue visual indicator test cases to `packages/frontend/src/components/__tests__/TodoCard.test.js`
   - overdue todo has class `overdue` on `.todo-card`
   - overdue todo renders "Overdue" badge
   - completed past-due todo does NOT have class `overdue`
@@ -76,7 +76,7 @@ called inside the utility on each invocation.
 **Independent Test**: Mock `Date` in the test to control "today", verify a todo whose
 `dueDate` equals `today - 1 day` is overdue and one whose `dueDate` equals `today` is not.
 
-- [ ] T007 [US2] Add dynamic date computation test to `packages/frontend/src/utils/__tests__/isOverdue.test.js` — use `jest.useFakeTimers` / `jest.setSystemTime` to pin "today" and assert the due-today boundary fires correctly
+- [X] T007 [US2] Add dynamic date computation test to `packages/frontend/src/utils/__tests__/isOverdue.test.js` — use `jest.useFakeTimers` / `jest.setSystemTime` to pin "today" and assert the due-today boundary fires correctly
 
 **Checkpoint**: User Story 2 validated — no implementation change required.
 
@@ -92,7 +92,7 @@ todo removes its overdue indicator.
 class disappears. Simulate editing due date to a future value → `overdue` class
 disappears.
 
-- [ ] T008 [US3] Add interactivity test cases to `packages/frontend/src/components/__tests__/TodoCard.test.js`
+- [X] T008 [US3] Add interactivity test cases to `packages/frontend/src/components/__tests__/TodoCard.test.js`
   - overdue todo: clicking checkbox calls `onToggle` (baseline interactivity check)
   - overdue todo: edit and delete buttons are present and enabled
   - re-render with `completed: 1` removes the `overdue` class (simulates post-toggle state)
@@ -106,8 +106,8 @@ disappears.
 
 **Purpose**: Verify linting compliance and coverage requirements before PR.
 
-- [ ] T009 Run `npm test --workspace=packages/frontend -- --coverage` and confirm overall coverage ≥ 80%; address any gaps
-- [ ] T010 [P] Run `npm run lint` (or `npm run lint:fix`) from `packages/frontend` and resolve all ESLint errors/warnings
+- [X] T009 Run `npm test --workspace=packages/frontend -- --coverage` and confirm overall coverage ≥ 80%; address any gaps
+- [X] T010 [P] Run `npm run lint` (or `npm run lint:fix`) from `packages/frontend` and resolve all ESLint errors/warnings
 
 ---
 

@@ -19,5 +19,11 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "iconv-lite": "^0.7.2",
+    "tr46": "^6.0.0",
+    "w3c-hr-time": "^1.0.2",
+    "whatwg-mimetype": "^5.0.0"
   }
 }
