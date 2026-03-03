@@ -1,6 +1,6 @@
 {
   "name": "copilot-bootcamp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Monorepo with React frontend and Node backend",
   "private": true,
   "workspaces": [
